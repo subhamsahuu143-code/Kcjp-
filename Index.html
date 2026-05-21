@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>KCJP • Kalahandi Cockroaches Janta Party</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+:root{
+--bg:#f1f5f9;
+--card:#ffffff;
+--text:#0f172a;
+--primary:#1d4ed8;
+--secondary:#2563eb;
+--border:#dbeafe;
+}
+
+.dark{
+--bg:#0f172a;
+--card:#1e293b;
+--text:#ffffff;
+--primary:#3b82f6;
+--secondary:#60a5fa;
+--border:#334155;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+font-family:'Poppins',sans-serif;
+transition:0.3s;
+}
+
+nav{
+position:sticky;
+top:0;
+z-index:999;
+background:linear-gradient(135deg,#1e3a8a,#2563eb);
+padding:15px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo-wrap{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.logo-wrap img{
+width:50px;
+height:50px;
+border-radius:50%;
+object-fit:cover;
+border:2px solid white;
+}
+
+.logo-text{
+font-family:'Rajdhani',sans-serif;
+font-size:28px;
+font-weight:700;
+color:white;
+}
+
+.nav-right{
+display:flex;
+gap:10px;
+}
+
+.nav-btn{
+padding:10px 15px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-weight:600;
+}
+
+.theme-btn{
+background:#facc15;
+}
+
+.hero{
+padding:80px 20px;
+background:linear-gradient(135deg,#1e3a8a,#2563eb);
+text-align:center;
+color:white;
+}
+
+.hero h1{
+font-size:55px;
+font-family:'Rajdhani',sans-serif;
+}
+
+.hero p{
+margin-top:15px;
+font-size:18px;
+max-width:700px;
+margin-inline:auto;
+line-height:1.8;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:20px;
+}
+
+.card{
+background:var(--card);
+padding:20px;
+border-radius:18px;
+margin-top:20px;
+border:1px solid var(--border);
+box-shadow:0 5px 20px rgba(0,0,0,0.08);
+}
+
+h2{
+font-family:'Rajdhani',sans-serif;
+font-size:30px;
+margin-bottom:15px;
+}
+
+input,textarea,select{
+width:100%;
+padding:14px;
+border-radius:10px;
+border:1px solid #cbd5e1;
+margin-top:12px;
+font-size:15px;
+background:white;
+}
+
+textarea{
+min-height:140px;
+resize:vertical;
+}
+
+.submit{
+margin-top:15px;
+width:100%;
+padding:15px;
+border:none;
+border-radius:12px;
+background:var(--primary);
+color:white;
+font-size:16px;
+cursor:pointer;
+font-weight:600;
+}
+
+.post{
+background:var(--card);
+padding:20px;
+border-radius:18px;
+margin-top:20px;
+border:1px solid var(--border);
+animation:fade 0.4s ease;
+}
+
+@keyframes fade{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+.post-top{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.avatar{
+width:55px;
+height:55px;
+border-radius:50%;
+object-fit:cover;
+background:#2563eb;
+}
+
+.post h3{
+margin-top:15px;
+font-size:26px;
+}
+
+.post p{
+margin-top:12px;
+line-height:1.9;
+}
+
+.post-image{
+width:100%;
+border-radius:14px;
+margin-top:15px;
+max-height:420px;
+object-fit:cover;
+}
+
+.actions{
+display:flex;
+gap:10px;
+margin-top:20px;
+flex-wrap:wrap;
+}
+
+.actions button{
+padding:10px 15px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-weight:600;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-top:15px;
+}
+
+.stat{
+background:linear-gradient(135deg,#1e3a8a,#2563eb);
+padding:20px;
+border-radius:14px;
+text-align:center;
+color:white;
+}
+
+.stat h1{
+font-size:32px;
+font-family:'Rajdhani',sans-serif;
+}
+
+.member{
+display:flex;
+align-items:center;
+gap:12px;
+margin-top:15px;
+padding:12px;
+background:rgba(37,99,235,0.08);
+border-radius:12px;
+}
+
+.member img{
+width:50px;
+height:50px;
+border-radius:50%;
+object-fit:cover;
+}
+
+.badge{
+background:#22c55e;
+padding:5px 10px;
+border-radius:20px;
+font-size:12px;
+color:white;
+font-weight:600;
+display:inline-block;
+margin-top:5px;
+}
+
+footer{
+margin-top:40px;
+padding:30px;
+text-align:center;
+background:#1e3a8a;
+color:white;
+}
+
+.hidden{
+display:none;
+}
+
+@media(max-width:900px){
+
+.grid{
+grid-template-columns:1fr;
+}
+
+.hero h1{
+font-size:40px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<nav>
+
+<div class="logo-wrap">
+
+<img src="https://i.imgur.com/HeIi0wU.png">
+
+<div class="logo-text">KCJP</div>
+
+</div>
+
+<div class="nav-right">
+
+<button class="nav-btn theme-btn" onclick="toggleTheme()">🌙 Theme</button>
+
+<button class="nav-btn" onclick="toggleAuth()">🔐 Login</button>
+
+</div>
+
+</nav>
+
+<section class="hero">
+
+<h1>Kalahandi Cockroaches Janta Party</h1>
+
+<p>
+Awaz uthao. System ko challenge karo.
+Public issues ko digital revolution me badlo.
+</p>
+
+</section>
+
+<div class="container">
+
+<div class="stats">
+
+<div class="stat">
+<h1 id="membersCount">0</h1>
+<p>Members</p>
+</div>
+
+<div class="stat">
+<h1 id="postsCount">0</h1>
+<p>Posts</p>
+</div>
+
+<div class="stat">
+<h1>24/7</h1>
+<p>Movement</p>
+</div>
+
+</div>
+
+<div class="grid">
+
+<div>
+
+<div class="card">
+
+<h2>✍️ Create Post</h2>
+
+<input type="text" id="postTitle" placeholder="Post Title">
+
+<input type="text" id="postImage" placeholder="Image URL">
+
+<textarea id="postContent" placeholder="Write your issue or message..."></textarea>
+
+<button class="submit" onclick="createPost()">🚀 Publish Post</button>
+
+</div>
+
+<div id="posts"></div>
+
+</div>
+
+<div>
+
+<div class="card hidden" id="authBox">
+
+<h2>🔐 Login / Register</h2>
+
+<input type="text" id="name" placeholder="Full Name">
+
+<input type="text" id="photo" placeholder="Profile Image URL">
+
+<input type="email" id="email" placeholder="Email">
+
+<input type="password" id="password" placeholder="Password">
+
+<button class="submit" onclick="registerUser()">Register</button>
+
+<button class="submit" onclick="loginUser()">Login</button>
+
+<button class="submit" style="background:#475569;" onclick="forgotPassword()">Forgot Password</button>
+
+<p id="authMsg" style="margin-top:10px;"></p>
+
+</div>
+
+<div class="card">
+
+<h2>📜 Manifesto</h2>
+
+<p style="line-height:2;">
+✔️ Youth Employment<br>
+✔️ Digital Political Awareness<br>
+✔️ Public Voice System<br>
+✔️ Corruption Against Movement<br>
+✔️ Development of Kalahandi
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>🐛 About KCJP</h2>
+
+<p style="line-height:2;">
+KCJP ek digital public movement hai jo youth aur local public issues ko national level tak pahuchane ka aim rakhta hai.
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>👥 Active Members</h2>
+
+<div id="membersList"></div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<footer>
+© 2026 KCJP • Kalahandi Odisha
+</footer>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+addDoc,
+getDocs,
+serverTimestamp,
+onSnapshot,
+query,
+orderBy
+}
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+import {
+getAuth,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+sendPasswordResetEmail,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDDh2ktUZB3cW8ZNMODJRKyrhFlRMGimk8",
+  authDomain: "critical-lens-b9c2b.firebaseapp.com",
+  databaseURL: "https://critical-lens-b9c2b-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "critical-lens-b9c2b",
+  storageBucket: "critical-lens-b9c2b.firebasestorage.app",
+  messagingSenderId: "271955343049",
+  appId: "1:271955343049:web:96d7e57d8e66c260c13f18",
+  measurementId: "G-N3Z7ESTZY4"
+};
+
+const app=initializeApp(firebaseConfig);
+
+const db=getFirestore(app);
+
+const auth=getAuth(app);
+
+let currentUser=null;
+
+window.toggleTheme=function(){
+
+document.body.classList.toggle("dark");
+
+}
+
+window.toggleAuth=function(){
+
+document.getElementById("authBox").classList.toggle("hidden");
+
+}
+
+onAuthStateChanged(auth,(user)=>{
+
+currentUser=user;
+
+});
+
+window.registerUser=async function(){
+
+const email=document.getElementById("email").value;
+
+const password=document.getElementById("password").value;
+
+const name=document.getElementById("name").value;
+
+const photo=document.getElementById("photo").value;
+
+try{
+
+await createUserWithEmailAndPassword(auth,email,password);
+
+await addDoc(collection(db,"kcjp_members"),{
+
+name,
+photo,
+email,
+createdAt:serverTimestamp()
+
+});
+
+document.getElementById("authMsg").innerHTML="✅ Registered Successfully";
+
+loadMembers();
+
+}catch(e){
+
+document.getElementById("authMsg").innerHTML=e.message;
+
+}
+
+}
+
+window.loginUser=async function(){
+
+const email=document.getElementById("email").value;
+
+const password=document.getElementById("password").value;
+
+try{
+
+await signInWithEmailAndPassword(auth,email,password);
+
+document.getElementById("authMsg").innerHTML="✅ Login Successful";
+
+}catch(e){
+
+document.getElementById("authMsg").innerHTML=e.message;
+
+}
+
+}
+
+window.forgotPassword=async function(){
+
+const email=document.getElementById("email").value;
+
+if(!email){
+
+alert("Enter Email");
+
+return;
+
+}
+
+try{
+
+await sendPasswordResetEmail(auth,email);
+
+alert("Password Reset Email Sent");
+
+}catch(e){
+
+alert(e.message);
+
+}
+
+}
+
+window.createPost=async function(){
+
+if(!currentUser){
+
+alert("Login First");
+
+return;
+
+}
+
+const title=document.getElementById("postTitle").value;
+
+const image=document.getElementById("postImage").value;
+
+const content=document.getElementById("postContent").value;
+
+await addDoc(collection(db,"kcjp_posts"),{
+
+title,
+image,
+content,
+createdAt:serverTimestamp()
+
+});
+
+document.getElementById("postTitle").value="";
+document.getElementById("postImage").value="";
+document.getElementById("postContent").value="";
+
+}
+
+function loadPosts(){
+
+const q=query(collection(db,"kcjp_posts"),orderBy("createdAt","desc"));
+
+onSnapshot(q,(snapshot)=>{
+
+document.getElementById("posts").innerHTML="";
+
+document.getElementById("postsCount").innerHTML=snapshot.size;
+
+snapshot.forEach((doc)=>{
+
+const p=doc.data();
+
+document.getElementById("posts").innerHTML+=`
+
+<div class="post">
+
+<div class="post-top">
+
+<img class="avatar"
+src="${p.image || 'https://i.imgur.com/HeIi0wU.png'}">
+
+<div>
+
+<h4>KCJP Member</h4>
+
+<div class="badge">Verified</div>
+
+</div>
+
+</div>
+
+<h3>${p.title}</h3>
+
+<p>${p.content}</p>
+
+${p.image ? `<img class="post-image" src="${p.image}">` : ''}
+
+<div class="actions">
+
+<button>👍 Like</button>
+
+<button>💬 Comment</button>
+
+<button onclick="sharePost('${p.title}')">📤 Share</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+});
+
+}
+
+function loadMembers(){
+
+onSnapshot(collection(db,"kcjp_members"),(snapshot)=>{
+
+document.getElementById("membersCount").innerHTML=snapshot.size;
+
+document.getElementById("membersList").innerHTML="";
+
+snapshot.forEach((doc)=>{
+
+const m=doc.data();
+
+document.getElementById("membersList").innerHTML+=`
+
+<div class="member">
+
+<img src="${m.photo || 'https://i.imgur.com/HeIi0wU.png'}">
+
+<div>
+
+<h4>${m.name || 'KCJP Member'}</h4>
+
+<div class="badge">Active</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+});
+
+}
+
+window.sharePost=function(title){
+
+navigator.share({
+
+title:"KCJP",
+text:title,
+url:window.location.href
+
+});
+
+}
+
+loadPosts();
+
+loadMembers();
+
+</script>
+
+</body>
+</html>
