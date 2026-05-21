@@ -292,6 +292,18 @@ color:white;
 display:none;
 }
 
+.error{
+color:#dc2626;
+margin-top:10px;
+font-weight:600;
+}
+
+.success{
+color:#16a34a;
+margin-top:10px;
+font-weight:600;
+}
+
 @media(max-width:900px){
 
 .grid{
@@ -313,7 +325,7 @@ font-size:40px;
 
 <div class="logo-wrap">
 
-<img src="https://i.imgur.com/HeIi0wU.png">
+<img src="https://i.imgur.com/HeIi0wU.png" alt="KCJP Logo">
 
 <div class="logo-text">KCJP</div>
 
@@ -376,6 +388,8 @@ Public issues ko digital revolution me badlo.
 <textarea id="postContent" placeholder="Write your issue or message..."></textarea>
 
 <button class="submit" onclick="createPost()">🚀 Publish Post</button>
+
+<div id="postMsg"></div>
 
 </div>
 
@@ -493,135 +507,164 @@ const db=getFirestore(app);
 const auth=getAuth(app);
 
 let currentUser=null;
+let currentUserData=null;
 
 window.toggleTheme=function(){
-
 document.body.classList.toggle("dark");
-
 }
 
 window.toggleAuth=function(){
-
 document.getElementById("authBox").classList.toggle("hidden");
-
 }
 
 onAuthStateChanged(auth,(user)=>{
-
 currentUser=user;
-
+if(user){
+  loadUserData(user.uid);
+}
 });
+
+function loadUserData(uid){
+onSnapshot(collection(db,"kcjp_members"),(snapshot)=>{
+  snapshot.forEach((doc)=>{
+    if(doc.data().uid===uid || doc.data().email===currentUser.email){
+      currentUserData=doc.data();
+    }
+  });
+});
+}
 
 window.registerUser=async function(){
 
-const email=document.getElementById("email").value;
+const email=document.getElementById("email").value.trim();
+const password=document.getElementById("password").value.trim();
+const name=document.getElementById("name").value.trim();
+const photo=document.getElementById("photo").value.trim();
 
-const password=document.getElementById("password").value;
-
-const name=document.getElementById("name").value;
-
-const photo=document.getElementById("photo").value;
+if(!email || !password || !name){
+  document.getElementById("authMsg").innerHTML="<span class='error'>❌ Please fill all fields</span>";
+  return;
+}
 
 try{
 
 await createUserWithEmailAndPassword(auth,email,password);
 
 await addDoc(collection(db,"kcjp_members"),{
-
 name,
 photo,
 email,
+uid:currentUser.uid,
 createdAt:serverTimestamp()
-
 });
 
-document.getElementById("authMsg").innerHTML="✅ Registered Successfully";
+document.getElementById("authMsg").innerHTML="<span class='success'>✅ Registered Successfully</span>";
+document.getElementById("name").value="";
+document.getElementById("photo").value="";
+document.getElementById("email").value="";
+document.getElementById("password").value="";
 
 loadMembers();
 
 }catch(e){
-
-document.getElementById("authMsg").innerHTML=e.message;
-
+document.getElementById("authMsg").innerHTML=`<span class='error'>❌ ${escapeHtml(e.message)}</span>`;
 }
-
 }
 
 window.loginUser=async function(){
 
-const email=document.getElementById("email").value;
+const email=document.getElementById("email").value.trim();
+const password=document.getElementById("password").value.trim();
 
-const password=document.getElementById("password").value;
+if(!email || !password){
+  document.getElementById("authMsg").innerHTML="<span class='error'>❌ Please enter email and password</span>";
+  return;
+}
 
 try{
 
 await signInWithEmailAndPassword(auth,email,password);
 
-document.getElementById("authMsg").innerHTML="✅ Login Successful";
+document.getElementById("authMsg").innerHTML="<span class='success'>✅ Login Successful</span>";
+document.getElementById("email").value="";
+document.getElementById("password").value="";
+
+setTimeout(()=>{
+  document.getElementById("authBox").classList.add("hidden");
+},1000);
 
 }catch(e){
-
-document.getElementById("authMsg").innerHTML=e.message;
-
+document.getElementById("authMsg").innerHTML=`<span class='error'>❌ ${escapeHtml(e.message)}</span>`;
 }
-
 }
 
 window.forgotPassword=async function(){
 
-const email=document.getElementById("email").value;
+const email=document.getElementById("email").value.trim();
 
 if(!email){
-
-alert("Enter Email");
-
+alert("❌ Enter Email");
 return;
-
 }
 
 try{
-
 await sendPasswordResetEmail(auth,email);
-
-alert("Password Reset Email Sent");
-
+alert("✅ Password Reset Email Sent");
 }catch(e){
-
-alert(e.message);
-
+alert(`❌ ${escapeHtml(e.message)}`);
 }
-
 }
 
 window.createPost=async function(){
 
 if(!currentUser){
-
-alert("Login First");
-
+document.getElementById("postMsg").innerHTML="<span class='error'>❌ Login First</span>";
 return;
-
 }
 
-const title=document.getElementById("postTitle").value;
+const title=document.getElementById("postTitle").value.trim();
+const image=document.getElementById("postImage").value.trim();
+const content=document.getElementById("postContent").value.trim();
 
-const image=document.getElementById("postImage").value;
+if(!title || !content){
+  document.getElementById("postMsg").innerHTML="<span class='error'>❌ Title and Content are required</span>";
+  return;
+}
 
-const content=document.getElementById("postContent").value;
-
+try{
 await addDoc(collection(db,"kcjp_posts"),{
-
 title,
 image,
 content,
+authorName:currentUserData?.name || currentUser.email,
+authorPhoto:currentUserData?.photo || "https://i.imgur.com/HeIi0wU.png",
+authorEmail:currentUser.email,
 createdAt:serverTimestamp()
-
 });
 
 document.getElementById("postTitle").value="";
 document.getElementById("postImage").value="";
 document.getElementById("postContent").value="";
+document.getElementById("postMsg").innerHTML="<span class='success'>✅ Post Published Successfully</span>";
 
+setTimeout(()=>{
+  document.getElementById("postMsg").innerHTML="";
+},3000);
+
+}catch(e){
+document.getElementById("postMsg").innerHTML=`<span class='error'>❌ ${escapeHtml(e.message)}</span>`;
+}
+}
+
+function escapeHtml(text){
+const map={
+  '&':'&amp;',
+  '<':'&lt;',
+  '>':'&gt;',
+  '"':'&quot;',
+  "'":"&#039;"
+};
+return text.replace(/[&<>"']/g,m=>map[m]);
 }
 
 function loadPosts(){
@@ -637,45 +680,35 @@ document.getElementById("postsCount").innerHTML=snapshot.size;
 snapshot.forEach((doc)=>{
 
 const p=doc.data();
+const postContainer=document.createElement("div");
+postContainer.className="post";
 
-document.getElementById("posts").innerHTML+=`
+const authorPhoto=p.authorPhoto || 'https://i.imgur.com/HeIi0wU.png';
+const authorName=p.authorName || 'KCJP Member';
 
-<div class="post">
-
+postContainer.innerHTML=`
 <div class="post-top">
-
-<img class="avatar"
-src="${p.image || 'https://i.imgur.com/HeIi0wU.png'}">
-
-<div>
-
-<h4>KCJP Member</h4>
-
-<div class="badge">Verified</div>
-
+  <img class="avatar" src="${escapeHtml(authorPhoto)}" alt="Avatar" onerror="this.src='https://i.imgur.com/HeIi0wU.png'">
+  <div>
+    <h4>${escapeHtml(authorName)}</h4>
+    <div class="badge">Verified</div>
+  </div>
 </div>
 
-</div>
+<h3>${escapeHtml(p.title)}</h3>
 
-<h3>${p.title}</h3>
+<p>${escapeHtml(p.content)}</p>
 
-<p>${p.content}</p>
-
-${p.image ? `<img class="post-image" src="${p.image}">` : ''}
+${p.image ? `<img class="post-image" src="${escapeHtml(p.image)}" alt="Post Image" onerror="this.style.display='none'">` : ''}
 
 <div class="actions">
-
-<button>👍 Like</button>
-
-<button>💬 Comment</button>
-
-<button onclick="sharePost('${p.title}')">📤 Share</button>
-
+  <button>👍 Like</button>
+  <button>💬 Comment</button>
+  <button onclick="sharePost('${escapeHtml(p.title)}')">📤 Share</button>
 </div>
-
-</div>
-
 `;
+
+document.getElementById("posts").appendChild(postContainer);
 
 });
 
@@ -694,24 +727,18 @@ document.getElementById("membersList").innerHTML="";
 snapshot.forEach((doc)=>{
 
 const m=doc.data();
+const memberDiv=document.createElement("div");
+memberDiv.className="member";
 
-document.getElementById("membersList").innerHTML+=`
-
-<div class="member">
-
-<img src="${m.photo || 'https://i.imgur.com/HeIi0wU.png'}">
-
+memberDiv.innerHTML=`
+<img src="${escapeHtml(m.photo || 'https://i.imgur.com/HeIi0wU.png')}" alt="Member" onerror="this.src='https://i.imgur.com/HeIi0wU.png'">
 <div>
-
-<h4>${m.name || 'KCJP Member'}</h4>
-
-<div class="badge">Active</div>
-
+  <h4>${escapeHtml(m.name || 'KCJP Member')}</h4>
+  <div class="badge">Active</div>
 </div>
-
-</div>
-
 `;
+
+document.getElementById("membersList").appendChild(memberDiv);
 
 });
 
@@ -721,12 +748,15 @@ document.getElementById("membersList").innerHTML+=`
 
 window.sharePost=function(title){
 
-navigator.share({
+if(!navigator.share){
+  alert("Share not supported on this device");
+  return;
+}
 
+navigator.share({
 title:"KCJP",
 text:title,
 url:window.location.href
-
 });
 
 }
